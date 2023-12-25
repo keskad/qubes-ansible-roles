@@ -41,5 +41,5 @@
             
       - name: Enable service
         service:
-          name: qubes-wg-wireguard
+          name: qubes-wireguard
           enabled: yes

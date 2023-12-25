@@ -1,0 +1,14 @@
+---
+  - name: "sys-audio"
+    hosts: localhost
+    become: yes
+    become_user: root
+    tasks:
+      - name: Make sure packages are installed
+        package:
+          name: ["pipewire-qubes", "qubes-audio-daemon", "pavucontrol", "qubes-core-admin-client", "qubes-usb-proxy", "alsa-utils", "qubes-app-shutdown-idle", "blueman", "cairo-dock", "firmware-linux"]
+          state: latest
+      - name: Enable bluetooth
+        service:
+          name: bluetooth
+          enabled: yes

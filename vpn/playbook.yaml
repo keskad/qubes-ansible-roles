@@ -22,7 +22,7 @@
             done
       - name: Create startup service
         copy:
-          dest: /etc/systemd/system/qubes-wg-mount.unit
+          dest: /etc/systemd/system/qubes-wireguard.unit
           content: |
             [Unit]
             Description=Setup all Wireguard tunnels defined in /home/user/wireguard directory
@@ -38,5 +38,5 @@
             WantedBy=multi-user.target
       - name: Enable service
         service:
-          name: qubes-wg-mount
+          name: qubes-wg-wireguard
           enabled: yes

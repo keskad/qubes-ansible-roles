@@ -1,0 +1,10 @@
+---
+  - name: "crypto"
+    hosts: localhost
+    become: yes
+    become_user: root
+    tasks:
+      - name: Make sure packages are installed
+        package:
+          name: ["bitcoin-core"]
+          state: latest

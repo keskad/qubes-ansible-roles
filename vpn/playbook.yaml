@@ -8,6 +8,7 @@
         package:
           name: ["wireguard-tools"]
           state: latest
+          
       - name: Create startup script
         copy:
           dest: /usr/local/bin/qubes-wg-manage
@@ -16,10 +17,11 @@
             #!/bin/bash
             action=$1
             for f in $(ls /home/user/wireguard/*.conf); do
-                cp /home/user/wireguard/$f /etc/wireguard/$f
-                echo " >> $f"
-                wg-quick $(basename -s .conf $f) $action
+                cp $f /etc/wireguard/$(basename $f)
+                echo " >> $(basename -s .conf $f)"
+                wg-quick $action $(basename -s .conf $f)
             done
+            
       - name: Create startup service
         copy:
           dest: /etc/systemd/system/qubes-wireguard.unit
@@ -36,6 +38,7 @@
 
             [Install]
             WantedBy=multi-user.target
+            
       - name: Enable service
         service:
           name: qubes-wg-wireguard

@@ -11,16 +11,18 @@
           
       - name: Create startup script
         copy:
-          dest: /usr/local/bin/qubes-wg-manage
+          dest: /usr/bin/qubes-wg-manage
           mode: "u+rwx,g+rx,o+rx"
           content: |
             #!/bin/bash
+            set -e
             action=$1
             for f in $(ls /home/user/wireguard/*.conf); do
                 cp $f /etc/wireguard/$(basename $f)
                 echo " >> $(basename -s .conf $f)"
                 wg-quick $action $(basename -s .conf $f)
             done
+            sleep infinity
             
       - name: Create startup service
         copy:
@@ -33,8 +35,8 @@
 
             [Service]
             Type=simple
-            ExecStart=/usr/local/bin/qubes-wg-manage up
-            ExecStop=/usr/local/bin/qubes-wg-manage down
+            ExecStart=/usr/bin/qubes-wg-manage up
+            ExecStop=/usr/bin/qubes-wg-manage down
 
             [Install]
             WantedBy=multi-user.target

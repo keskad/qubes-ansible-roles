@@ -24,7 +24,7 @@
             
       - name: Create startup service
         copy:
-          dest: /etc/systemd/system/qubes-wireguard.unit
+          dest: /etc/systemd/system/qubes-wireguard.service
           content: |
             [Unit]
             Description=Setup all Wireguard tunnels defined in /home/user/wireguard directory

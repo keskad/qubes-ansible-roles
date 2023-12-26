@@ -1,1 +1,130 @@
+---
+  - name: "work"
+    hosts: localhost
+    become: yes
+    become_user: root
+    tasks:
+      - name: Set versions
+        set_fact:
+          _kubectl_version: "{{ kubectl_version | default('1.29.0') }}"
+          _kustomize_version: "{{ kustomize_version | default('5.3.0') }}"
+          _helm_version: "{{ helm_version | default('3.13.3') }}"
+          _k3d_version: "{{ k3d_version | default('5.6.0') }}"
+          _yq_version: "{{ yq_version | default('4.40.5') }}"
+          _jq_version: "{{ jq_version | default('1.7.1') }}"
+          _kubeseal_version: "{{ kubeseal_version | default('0.24.5') }}"
+          _pack_version: "{{ pack_version | default('0.32.1') }}"
+          _tkn_version: "{{ tkn_version | default('0.33.0') }}"
+          _oc_version: "{{ oc_version | default('4.14.0-0.okd-2023-12-01-225814') }}"
+
+      - name: Install ZSH
+        package:
+          name: zsh
+          state: present
+
+      - name: Install docker
+        package:
+          name: docker.io
+          state: present
+
+      - name: Disable docker by default
+        systemd:
+          name: docker
+          enabled: no
+
+      - name: Download kubectl
+        get_url:
+          url: "https://dl.k8s.io/release/v{{ _kubectl_version }}/bin/linux/amd64/kubectl"
+          dest: /usr/bin/kubectl
+          mode: "u+rwx,g+rx,o+rx"
+
+      - name: Download kustomize
+        unarchive:
+          src: "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv{{ _kustomize_version }}/kustomize_v{{ _kustomize_version }}_linux_amd64.tar.gz"
+          dest: /usr/bin
+          remote_src: yes
+
+      - name: Make kustomize executable
+        file:
+          path: /usr/bin/kustomize
+          state: file
+          mode: "u+rwx,g+rx,o+rx"
+
+      - name: Download helm
+        unarchive:
+          src: "https://get.helm.sh/helm-v{{ _helm_version }}-linux-amd64.tar.gz"
+          dest: /tmp
+          remote_src: yes
+
+      - name: Move helm to /usr/bin/helm
+        copy:
+          src: /tmp/linux-amd64/helm
+          dest: /usr/bin/helm
+          mode: "u+rwx,g+rx,o+rx"
+
+      - name: Download k3d
+        get_url:
+          url: "https://github.com/k3d-io/k3d/releases/download/v{{ _k3d_version }}/k3d-linux-amd64"
+          dest: /usr/bin/k3d
+          mode: "u+rwx,g+rx,o+rx"
+
+      - name: Download yq
+        get_url:
+          url: "https://github.com/mikefarah/yq/releases/download/v{{ _yq_version }}/yq_linux_amd64"
+          dest: /usr/bin/yq
+          mode: "u+rwx,g+rx,o+rx"
+
+      - name: Download jq
+        get_url:
+          url: "https://github.com/jqlang/jq/releases/download/jq-{{ _jq_version }}/jq-linux-amd64"
+          dest: /usr/bin/jq
+          mode: "u+rwx,g+rx,o+rx"
+
+      - name: Download kubeseal
+        unarchive:
+          src: "https://github.com/bitnami-labs/sealed-secrets/releases/download/v{{ _kubeseal_version }}/kubeseal-{{ _kubeseal_version }}-linux-amd64.tar.gz"
+          dest: /tmp
+          remote_src: yes
+
+      - name: Move kubeseal to /usr/bin/kubeseal
+        copy:
+          src: /tmp/kubeseal
+          dest: /usr/bin/kubeseal
+          mode: "u+rwx,g+rx,o+rx"
+
+      - name: Download pack cli
+        unarchive:
+          src: "https://github.com/buildpacks/pack/releases/download/v{{ _pack_version }}/pack-v{{ _pack_version }}-linux.tgz"
+          dest: /tmp
+          remote_src: yes
+
+      - name: Move pack to /usr/bin/pack
+        copy:
+          src: /tmp/pack
+          dest: /usr/bin/pack
+          mode: "u+rwx,g+rx,o+rx"
+
+      - name: Download tkn
+        unarchive:
+          src: "https://github.com/tektoncd/cli/releases/download/v{{ _tkn_version }}/tkn_{{ _tkn_version }}_Linux_x86_64.tar.gz"
+          dest: /tmp
+          remote_src: yes
+
+      - name: Move tkn to /usr/bin/tkn
+        copy:
+          src: /tmp/tkn
+          dest: /usr/bin/tkn
+          mode: "u+rwx,g+rx,o+rx"
+
+      - name: Download oc
+        unarchive:
+          src: "https://github.com/okd-project/okd/releases/download/{{ _oc_version }}/openshift-client-linux-{{ _oc_version }}.tar.gz"
+          dest: /tmp
+          remote_src: yes
+
+      - name: Move oc to /usr/bin/oc
+        copy:
+          src: /tmp/oc
+          dest: /usr/bin/oc
+          mode: "u+rwx,g+rx,o+rx"
 

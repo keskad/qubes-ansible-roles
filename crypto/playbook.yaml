@@ -4,7 +4,43 @@
     become: yes
     become_user: root
     tasks:
-      - name: Make sure packages are installed
-        package:
-          name: ["bitcoin-core"]
-          state: latest
+      - name: Set bitcoin-qt version
+        set_fact:
+          _btc_version: "{{ btc_version | default('26.0') }}"
+
+      - name: Create directory
+        file:
+          path: /opt/btc
+          state: directory
+
+      - name: Download and extract Bitcoin Core client
+        unarchive:
+          src: https://bitcoincore.org/bin/bitcoin-core-{{ _btc_version }}/bitcoin-{{ _btc_version }}-x86_64-linux-gnu.tar.gz
+          dest: /opt/btc
+          remote_src: yes
+
+      - name: Link bitcoin-qt binary to /usr/bin
+        file:
+          src: "/opt/btc/bitcoin-{{ _btc_version }}/bin/bitcoin-qt"
+          dest: /usr/bin/bitcoin-qt
+          owner: root
+          group: root
+          state: link
+
+      - name: Create desktop entry
+        copy:
+          owner: root
+          group: root
+          dest: /usr/share/applications/bitcoin-qt.desktop
+          content: |
+            [Desktop Entry]
+            Name=Bitcoin Core Qt
+            Comment=Make transactions over Bitcoin network
+            GenericName=Bitcoin Client
+            Exec=/usr/bin/bitcoin-qt
+            Terminal=false
+            X-MultipleArgs=false
+            Type=Application
+            Icon=bitcoin-qt
+            Categories=Network;
+

@@ -11,4 +11,4 @@
       - name: Enable bluetooth
         service:
           name: bluetooth
-          enabled: yes
+          enabled: no

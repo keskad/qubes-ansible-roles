@@ -1,0 +1,22 @@
+# Execute in a sys-audio parent template if parent is a DVM
+---
+  - name: "default-dvm"
+    hosts: localhost
+    become: yes
+    become_user: root
+    tasks:
+      - name: Create rc.local.d directory
+        file:
+          path: /rw/config/rc.local.d
+          state: directory
+
+      - name: Configure bluetooth startup
+        copy:
+          path: /rw/config/rc.local.d/sys-usb
+          contents: |
+            #!/bin/bash
+            if [[ $(hostname) == *"sys-usb"* ]]; then
+                sudo systemctl --no-block restart bluetooth
+                sudo -u user blueman-tray &
+            fi
+          mode: "u+rwx,g+rx,o+rx"

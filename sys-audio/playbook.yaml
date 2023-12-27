@@ -6,7 +6,7 @@
     tasks:
       - name: Make sure packages are installed
         package:
-          name: ["pipewire-qubes", "qubes-audio-daemon", "pavucontrol", "qubes-core-admin-client", "qubes-usb-proxy", "alsa-utils", "qubes-app-shutdown-idle", "blueman", "cairo-dock", "firmware-linux"]
+          name: ["pipewire-qubes", "qubes-audio-daemon", "pavucontrol", "qubes-core-admin-client", "qubes-usb-proxy", "alsa-utils", "qubes-app-shutdown-idle", "blueman", "cairo-dock", "firmware-linux", "libspa-0.2-bluetooth"]
           state: latest
       - name: Enable bluetooth
         service:

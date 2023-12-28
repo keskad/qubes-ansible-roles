@@ -17,6 +17,7 @@
             #!/bin/bash
             if [[ $(hostname) == *"sys-usb"* ]]; then
                 sudo systemctl --no-block restart bluetooth
-                sudo -u user blueman-tray &
+                sudo -u user pasystray -a -g &
+                sudo -u user blueman-manager &
             fi
           mode: "u+rwx,g+rx,o+rx"

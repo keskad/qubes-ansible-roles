@@ -6,7 +6,7 @@
     tasks:
       - name: Make sure packages are installed
         package:
-          name: ["wireguard-tools"]
+          name: ["wireguard-tools", "resolvconf"]
           state: latest
           
       - name: Create startup script

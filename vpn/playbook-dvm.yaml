@@ -1,0 +1,24 @@
+---
+  - name: "vpn-disp-template"
+    hosts: localhost
+    become: yes
+    become_user: root
+    tasks:
+      - name: Make sure packages are installed
+        package:
+          name: ["wireguard-tools", "resolvconf"]
+          state: latest
+
+      - name: Make sure directory exists
+        file:
+          path: /rw/config/rc.local.d
+          state: directory
+          
+      - name: Enable /usr/bin/wg-random-endpoint-enable
+        copy:
+          dest: /rw/config/rc.local.d/wg-random-endpoint-enable
+          mode: "u+rwx,g+rx,o+rx"
+          content: |
+            #!/bin/bash
+            exec sudo -u user /usr/bin/wg-random-endpoint-enable
+    

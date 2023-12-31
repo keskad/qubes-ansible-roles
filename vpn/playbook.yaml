@@ -40,6 +40,18 @@
 
             [Install]
             WantedBy=multi-user.target
+
+      - name: Add Wireguard random endpoint support
+        copy:
+          dest: /usr/bin/wg-random-endpoint-enable
+          content: |
+            #!/bin/bash
+            set -e
+            mkdir -p /home/user/wireguard-random-endpoints
+            randomConfig=$(basename -s .conf $(ls /home/user/wireguard-random-endpoints | shuf -n 1))
+            echo " >> ${randomConfig}"
+            cp /home/user/wireguard-random-endpoints/${randomConfig}.conf ~/wireguard/random-endpoint.conf
+            sudo systemctl restart qubes-wireguard
             
       - name: Enable service
         service:

@@ -16,7 +16,7 @@
           
       - name: Enable /usr/bin/wg-random-endpoint-enable
         copy:
-          dest: /rw/config/rc.local.d/wg-random-endpoint-enable
+          dest: /rw/config/rc.local.d/wg-random-endpoint-enable.rc
           mode: "u+rwx,g+rx,o+rx"
           content: |
             #!/bin/bash

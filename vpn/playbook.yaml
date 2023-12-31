@@ -44,6 +44,7 @@
       - name: Add Wireguard random endpoint support
         copy:
           dest: /usr/bin/wg-random-endpoint-enable
+          mode: "u+rwx,g+rx,o+rx"
           content: |
             #!/bin/bash
             set -e

@@ -1,0 +1,10 @@
+---
+  - name: "web"
+    hosts: localhost
+    become: yes
+    become_user: root
+    tasks:
+      - name: Install packages
+        package:
+          name: ["gimp", "htop", "chromium"]
+          state: present
